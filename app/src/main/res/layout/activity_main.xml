@@ -303,10 +303,10 @@
         Statistics Even
     -->
     <TextView
-        android:id="@+id/textViewStatsEven"
+        android:id="@+id/textViewStatsTie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Even"
+        android:text="Tie"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.165"
@@ -315,7 +315,7 @@
         app:layout_constraintVertical_bias="0.948" />
 
     <TextView
-        android:id="@+id/textViewStatsEvenNumber"
+        android:id="@+id/textViewStatsTieNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="20"
@@ -327,7 +327,7 @@
         app:layout_constraintVertical_bias="0.948" />
 
     <TextView
-        android:id="@+id/textViewStatsEvenPercentage"
+        android:id="@+id/textViewStatsTiePercentage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="100"
@@ -341,6 +341,7 @@
     <!--
         Restart
     -->
+
     <ImageView
         android:id="@+id/imgRestart"
         android:layout_width="103dp"
@@ -348,10 +349,24 @@
         android:onClick="RestartRound"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.912"
+        app:layout_constraintHorizontal_bias="0.922"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.941"
         app:srcCompat="@drawable/icon_restart" />
+
+    <Button
+        android:id="@+id/btnReset"
+        android:layout_width="99dp"
+        android:layout_height="36dp"
+        android:backgroundTint="#E1837C"
+        android:text="Reset"
+        android:onClick="ResetStats"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.903"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.768" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

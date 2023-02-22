@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView textViewStatsComputer;
     private TextView textViewStatsComputerNumber;
     private TextView textViewStatsComputerPercentage;
-    private TextView textViewStatsEvenNumber;
-    private TextView textViewStatsEvenPercentage;
+    private TextView textViewStatsTieNumber;
+    private TextView textViewStatsTiePercentage;
     private ImageView imgPlayerRock;
     private ImageView imgPlayerPaper;
     private ImageView imgPlayerScissors;
@@ -32,24 +32,19 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imgComputerPaper;
     private ImageView imgComputerScissors;
     private ImageView imgRestart;
+    private SharedPreferences sharedPreferences;
     private int playerOpt;
     private int computerOpt;
     private int round;
-    private int evenResults;
+    private int tieResults;
     private int playerResults;
     private int computerResults;
-
-    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        round = 0;
-        playerResults = 0;
-        computerResults = 0;
-        evenResults = 0;
         textTitle = findViewById(R.id.textTitle);
         textViewResult = findViewById(R.id.textViewResult);
         textViewWinner = findViewById(R.id.textViewWinner);
@@ -61,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
         textViewStatsComputer = findViewById(R.id.textViewStatsComputer);
         textViewStatsComputerNumber = findViewById(R.id.textViewStatsComputerNumber);
         textViewStatsComputerPercentage = findViewById(R.id.textViewStatsComputerPercentage);
-        textViewStatsEvenNumber = findViewById(R.id.textViewStatsEvenNumber);
-        textViewStatsEvenPercentage = findViewById(R.id.textViewStatsEvenPercentage);
+        textViewStatsTieNumber = findViewById(R.id.textViewStatsTieNumber);
+        textViewStatsTiePercentage = findViewById(R.id.textViewStatsTiePercentage);
         imgPlayerRock = findViewById(R.id.imgPlayerRock);
         imgPlayerPaper = findViewById(R.id.imgPlayerPaper);
         imgPlayerScissors = findViewById(R.id.imgPlayerScissors);
@@ -72,13 +67,32 @@ public class MainActivity extends AppCompatActivity {
         imgRestart = findViewById(R.id.imgRestart);
 
         // Defining the initial game status
-        NewRound();
-        textViewStatsPlayerNumber.setText("0");
-        textViewStatsPlayerPercentage.setText("0");
-        textViewStatsComputerNumber.setText("0");
-        textViewStatsComputerPercentage.setText("0");
-        textViewStatsEvenNumber.setText("0");
-        textViewStatsEvenPercentage.setText("0");
+        ResetStatistics();
+        sharedPreferences = getSharedPreferences("LastInput", MODE_PRIVATE);
+    }
+
+    @Override
+    protected void onPause() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("statsPlayerNum", textViewStatsPlayerNumber.getText().toString());
+        editor.putString("statsPlayerPerc", textViewStatsPlayerPercentage.getText().toString());
+        editor.putString("statsComputerNum", textViewStatsComputerNumber.getText().toString());
+        editor.putString("statsComputerPerc", textViewStatsComputerPercentage.getText().toString());
+        editor.putString("statsTieNum", textViewStatsTieNumber.getText().toString());
+        editor.putString("statsTiePerc", textViewStatsTiePercentage.getText().toString());
+        editor.commit();
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        textViewStatsPlayerNumber.setText(sharedPreferences.getString("statsPlayerNum", ""));
+        textViewStatsPlayerPercentage.setText(sharedPreferences.getString("statsPlayerPerc", ""));
+        textViewStatsComputerNumber.setText(sharedPreferences.getString("statsComputerNum", ""));
+        textViewStatsComputerPercentage.setText(sharedPreferences.getString("statsComputerPerc", ""));
+        textViewStatsTieNumber.setText(sharedPreferences.getString("statsTieNum", ""));
+        textViewStatsTiePercentage.setText(sharedPreferences.getString("statsTiePerc", ""));
     }
 
     public void NewRound(){
@@ -95,6 +109,19 @@ public class MainActivity extends AppCompatActivity {
         playerOpt = 0;
         computerOpt = 0;
         round ++;
+    }
+    public void ResetStatistics(){
+        textViewStatsPlayerNumber.setText("0");
+        textViewStatsPlayerPercentage.setText("0");
+        textViewStatsComputerNumber.setText("0");
+        textViewStatsComputerPercentage.setText("0");
+        textViewStatsTieNumber.setText("0");
+        textViewStatsTiePercentage.setText("0");
+        round = 0;
+        playerResults = 0;
+        computerResults = 0;
+        tieResults = 0;
+        NewRound();
     }
 
     public void PlayerGetRock(View view) {
@@ -144,10 +171,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void CheckResult() {
         if (playerOpt == 1) { // Player is Rock
-            if (computerOpt == 1) { // Computer is Rock. Result => EVEN
+            if (computerOpt == 1) { // Computer is Rock. Result => TIE
                 textViewResult.setText("Nobody wins this round.");
-                textViewWinner.setText("Even");
-                evenResults ++;
+                textViewWinner.setText("Tie");
+                tieResults ++;
             } else if (computerOpt == 2) { // Computer is Paper. Result => COMPUTER
                 textViewResult.setText("Sorry, you lost. The winner is:");
                 textViewWinner.setText("Computer");
@@ -162,10 +189,10 @@ public class MainActivity extends AppCompatActivity {
                 textViewResult.setText("Congratulations! The winner is:");
                 textViewWinner.setText("Player");
                 playerResults ++;
-            } else if (computerOpt == 2) { // Computer is Paper. Result => EVEN
+            } else if (computerOpt == 2) { // Computer is Paper. Result => TIE
                 textViewResult.setText("Nobody wins this round.");
-                textViewWinner.setText("Even");
-                evenResults ++;
+                textViewWinner.setText("Tie");
+                tieResults ++;
             } else { // Computer is Scissors. Result => COMPUTER
                 textViewResult.setText("Sorry, you lost. The winner is:");
                 textViewWinner.setText("Computer");
@@ -180,10 +207,10 @@ public class MainActivity extends AppCompatActivity {
                 textViewResult.setText("Congratulations! The winner is:");
                 textViewWinner.setText("Player");
                 playerResults ++;
-            } else { // Computer is Scissors. Result => EVEN
+            } else { // Computer is Scissors. Result => TIE
                 textViewResult.setText("Nobody wins this round.");
-                textViewWinner.setText("Even");
-                evenResults ++;
+                textViewWinner.setText("Tie");
+                tieResults ++;
             }
         }
         textViewResult.setVisibility(View.VISIBLE);
@@ -194,11 +221,16 @@ public class MainActivity extends AppCompatActivity {
         textViewStatsPlayerPercentage.setText(String.format ("%.2f",(((float)playerResults/(float)round)*100)));
         textViewStatsComputerNumber.setText("" + computerResults);
         textViewStatsComputerPercentage.setText(String.format("%.2f",(((float)computerResults/(float)round)*100)));
-        textViewStatsEvenNumber.setText("" + evenResults);
-        textViewStatsEvenPercentage.setText(String.format("%.2f",(((float)evenResults/(float)round)*100)));
+        textViewStatsTieNumber.setText("" + tieResults);
+        textViewStatsTiePercentage.setText(String.format("%.2f",(((float)tieResults/(float)round)*100)));
     }
 
-    public void RestartRound(View view){
+    public void RestartRound(View view)
+    {
         NewRound();
+    }
+    public void ResetStats(View view)
+    {
+        ResetStatistics();
     }
 }
