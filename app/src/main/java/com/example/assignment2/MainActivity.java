@@ -39,6 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private int tieResults;
     private int playerResults;
     private int computerResults;
+    public String playerName;
+    public int matchNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +67,12 @@ public class MainActivity extends AppCompatActivity {
         imgComputerPaper = findViewById(R.id.imgComputerPaper);
         imgComputerScissors = findViewById(R.id.imgComputerScissors);
         imgRestart = findViewById(R.id.imgRestart);
-
+        playerName = getIntent().getStringExtra("PlayerName");
+        matchNumber = Integer.valueOf(getIntent().getStringExtra("MatchNumber"));
+        textViewStatsPlayer.setText(playerName);
         // Defining the initial game status
-        ResetStatistics();
         sharedPreferences = getSharedPreferences("LastInput", MODE_PRIVATE);
+        ResetStatistics();
     }
 
     @Override
@@ -181,13 +185,13 @@ public class MainActivity extends AppCompatActivity {
                 computerResults ++;
             } else { // Computer is Scissors. Result => PLAYER
                 textViewResult.setText("Congratulations! The winner is:");
-                textViewWinner.setText("Player");
+                textViewWinner.setText(playerName);
                 playerResults ++;
             }
         } else if (playerOpt == 2) { // Player is Paper
             if (computerOpt == 1) { // Computer is Rock. Result => PLAYER
                 textViewResult.setText("Congratulations! The winner is:");
-                textViewWinner.setText("Player");
+                textViewWinner.setText(playerName);
                 playerResults ++;
             } else if (computerOpt == 2) { // Computer is Paper. Result => TIE
                 textViewResult.setText("Nobody wins this round.");
@@ -205,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 computerResults ++;
             } else if (computerOpt == 2) { // Computer is Paper. Result => PLAYER
                 textViewResult.setText("Congratulations! The winner is:");
-                textViewWinner.setText("Player");
+                textViewWinner.setText(playerName);
                 playerResults ++;
             } else { // Computer is Scissors. Result => TIE
                 textViewResult.setText("Nobody wins this round.");
